@@ -1,0 +1,139 @@
+<!-- search -->
+<div class="form__group field">
+  <input
+    type="input"
+    class="form__field"
+    placeholder="Name"
+    name="name"
+    id="name"
+    autofocus
+    [(ngModel)]="term"
+  />
+  <label for="name" class="form__label"
+    ><i class="btn-icon-prepend" data-feather="search" appFeatherIcon></i>Search
+    By Product title</label
+  >
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Title</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col" class="text-center">Address</th>
+      <th scope="col">Phone</th>
+      <th scope="col" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let user of users | filter: term; let i = index">
+    <td>{{ i + 1 }}</td>
+    <td>{{ user.title }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td class="text-center">{{ user.address }}</td>
+    <td>{{ user.phone }}</td>
+    <td class="text-center">
+      <button class="btn btn-info" (click)="open(content)">Edit</button>
+      <button
+        class="btn btn-danger"
+        style="color: black; margin-left: 1rem"
+        (click)="deleteUser(user)"
+      >
+        Delete
+      </button>
+    </td>
+
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Update user</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          (submit)="
+            updateUser(newTitle, newUserName, newEmail, newAddress, newPhone)
+          "
+        >
+          <div class="form-group">
+            <label for="Title"> Enter Title : </label>
+            <input
+              type="text"
+              placeholder="Enter Title"
+              #newTitle
+              name="title"
+              class="form-control mt-2"
+              [ngModel]="user.title"
+              oninput="this.value = this.value.replace(/[^A-z. ]/g, '').replace(/(\..*)\./g, '$1');"
+            />
+            <label for="Title" class="mt-2"> Enter Username : </label>
+            <input
+              type="text"
+              placeholder="Enter Username"
+              #newUserName
+              class="form-control"
+              name="username"
+              [ngModel]="user.username"
+              [disabled]="true"
+            />
+            <label for="Title" class="mt-2"> Enter Email : </label>
+            <input
+              type="text"
+              placeholder="Enter Email"
+              #newEmail
+              class="form-control mt-2"
+              name="email"
+              [ngModel]="user.email"
+              oninput="this.value = this.value.replace(/[^A-z0-9.@]/g, '').replace(/(\..*)\./g, '$1');"
+            />
+            <label for="Title" class="mt-2"> Enter Address : </label>
+            <input
+              type="text"
+              placeholder="Enter Address"
+              #newAddress
+              class="form-control mt-2"
+              [ngModel]="user.address"
+              name="address"
+            />
+            <label for="Title" class="mt-2"> Enter Phone Number : </label>
+            <input
+              type="number"
+              placeholder="Enter Phone"
+              #newPhone
+              class="form-control mt-2"
+              [ngModel]="user.phone"
+              name="phone"
+              (keypress)="($event.charCode >= 48 && $event.charCode < 58)"
+            />
+          </div>
+          <!-- <button class="btn btn-primary-btn-block">Save</button> -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-dark"
+              (click)="
+                modal.close('Save click');
+                updateUser(
+                  newTitle,
+                  newUserName,
+                  newEmail,
+                  newAddress,
+                  newPhone
+                )
+              "
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </tbody>
+</table>
